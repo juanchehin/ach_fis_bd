@@ -30,10 +30,10 @@ SALIR:BEGIN
 	END;
     -- Controla que el correo sea obligatorio 
 	IF pEmail = '' OR pEmail IS NULL THEN
-		SELECT 'Debe proveer un nombre para el correo' AS Mensaje, NULL AS Id;
+		SELECT 'Debe proveer un correo' AS Mensaje, NULL AS Id;
 		LEAVE SALIR;
     END IF;
-       
+
     -- Controla que el Documento sea obligatorio
 	IF pDNI = '' OR pDNI IS NULL THEN
 		SELECT 'Debe proveer un documento' AS Mensaje, NULL AS Id;

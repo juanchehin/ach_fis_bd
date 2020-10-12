@@ -10,7 +10,7 @@ BEGIN
 	SELECT		c.IdCliente,p.Apellidos,p.Nombres,p.DNI,DATE_FORMAT(p.FechaNac,'%d/%m/%Y') as FechaNac,DATE_FORMAT(p.FechaAlta,'%d/%m/%Y') as FechaAlta,p.Email,
 				p.Telefono,p.Direccion,p.Ciudad,p.Provincia,p.Sexo,p.EstadoPer,p.Comentarios
     FROM		personas p
-				LEFT JOIN clientes c on p.IdPersona = c.IdCliente
+				JOIN clientes c on p.IdPersona = c.IdCliente
     WHERE		EstadoPer = 'A'
     ORDER BY	apellidos asc;
 
