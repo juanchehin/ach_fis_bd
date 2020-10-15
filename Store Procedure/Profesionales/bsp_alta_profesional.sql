@@ -3,15 +3,15 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `bsp_alta_profesional`(
 pApellidos varchar(60),
 pNombres varchar(60),
-pSexo CHAR(1),
+pSexo bool,
 pFechaNac date,
 pTelefono int(30),
 pEmail varchar(60),
 pLocalidad varchar(70),
 pCalle varchar(60),
 pDNI int(45),
-pEstadoPer char(1),
-pObervaciones varchar(255)
+pObservaciones varchar(255),
+pEspecialidad varchar(200)
 )
 SALIR:BEGIN
 	/*
@@ -20,6 +20,7 @@ SALIR:BEGIN
     Devuelve OK + Id o el mensaje de error en Mensaje.
     */
 	DECLARE pIdPersona int;
+    DECLARE pSexo1 char;
 	-- Manejo de error en la transacción
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
@@ -45,14 +46,20 @@ SALIR:BEGIN
 		SELECT 'Ya existe un Documento con ese numero' AS Mensaje;
 		LEAVE SALIR;
     END IF;
+-- Convierto los valores
+    IF pSexo THEN
+		SET pSexo1 = 'M';
+	ELSE
+		SET pSexo1 = 'H';
+    END IF;
     
 	START TRANSACTION;
 		SET pIdPersona = 1 + (SELECT COALESCE(MAX(IdPersona),0) FROM personas);
-		INSERT INTO personas VALUES(pIdPersona,pApellidos,pNombres,pSexo,pFechaNac,pTelefono,
+		INSERT INTO personas VALUES(pIdPersona,pApellidos,pNombres,pSexo1,pFechaNac,pTelefono,
         pEmail,pLocalidad,pCalle,pDNI,curdate(),null,'A',pObservaciones);
 
-		INSERT INTO profesionales(IdCliente,Especialidad) VALUES(pIdPersona,pEspecialidad);
-	SELECT 'Ok' AS Mensaje;
+		INSERT INTO profesionales(IdProfesional,Especialidad) VALUES(pIdPersona,pEspecialidad);
+	SELECT 1;
     COMMIT;
 
 END ;;
